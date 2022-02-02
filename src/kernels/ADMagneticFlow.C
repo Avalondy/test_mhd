@@ -5,7 +5,7 @@ registerMooseObject("TestMHDApp", ADMagneticFlow);
 InputParameters
 ADMagneticFlow::validParams()
 {
-  InputParameters params = ADVectorKernel::validParams();
+  InputParameters params = ADVectorKernelValue::validParams();
   params.addClassDescription("The magnetic flow term of ($ - \\nabla \\times (\\vec{u} \\times \\vec{B})$). "
                              "The Jacobian is computed using automatic differentiation");
 
@@ -14,14 +14,14 @@ ADMagneticFlow::validParams()
 }
 
 ADMagneticFlow::ADMagneticFlow(const InputParameters & parameters)
-  : ADVectorKernel(parameters),
-    _velocity(adCoupledVectorValue("velocity"))
+  : ADVectorKernelValue(parameters),
+    _velocity(adCoupledVectorValue("velocity")),
+    _grad_velocity(adCoupledVectorGradient("velocity"))
 {
 }
 
-ADReal
-ADMagneticFlow::computeQpResidual()
+ADRealVectorValue
+ADMagneticFlow::precomputeQpResidual()
 {
-  // return _grad_test[_i][_qp].cross(_velocity[_qp].cross(_u[_qp]));
-  return 0.;
+  return _u[_qp] * _grad_velocity[_qp].tr() - _grad_velocity[_qp].transpose() * _u[_qp] + _grad_u[_qp].transpose() * _velocity[_qp];
 }

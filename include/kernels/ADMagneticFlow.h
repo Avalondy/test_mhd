@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ADVectorKernel.h"
+#include "ADKernelValue.h"
 
 /**
  *
  */
-class ADMagneticFlow : public ADVectorKernel
+class ADMagneticFlow : public ADVectorKernelValue
 {
 public:
   static InputParameters validParams();
@@ -13,8 +13,9 @@ public:
   ADMagneticFlow(const InputParameters & parameters);
 
 protected:
-  virtual ADReal computeQpResidual() override;
+  virtual ADRealVectorValue precomputeQpResidual() override;
   // virtual ADRealVectorValue computeQpJacobian() override;
 
   const ADVectorVariableValue & _velocity;
+  const ADVectorVariableGradient & _grad_velocity;
 };
