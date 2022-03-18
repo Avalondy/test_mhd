@@ -9,8 +9,8 @@ ADCoefVectorDiffusion::validParams()
   params.addClassDescription("The Laplacian operator ($-\\nabla \\cdot \\nabla \\vec{B}$), devided by two coefficients. "
                              "The Jacobian is computed using automatic differentiation");
 
-  params.addParam<Real>("mu_0", 1.0, "Permeability");
-  params.addParam<Real>("sigma", 1.0, "Electrical conductivity.");
+  params.addParam<Real>("mu_0", 1.2566E-6, "Permeability");
+  params.addParam<Real>("sigma", 1.0E6, "Electrical conductivity.");
   return params;
 }
 

@@ -10,13 +10,13 @@ ADCoupledDummy::validParams()
                              "the form of ($ \\nabla q $). "
                              "The Jacobian is computed using automatic differentiation");
 
-  params.addRequiredCoupledVar("dummy", "The dummy variable");
+  params.addRequiredCoupledVar("dummy_variable", "The dummy variable");
   return params;
 }
 
 ADCoupledDummy::ADCoupledDummy(const InputParameters & parameters)
   : ADVectorKernelValue(parameters),
-    _grad_dummy(adCoupledGradient("dummy"))
+    _grad_dummy(adCoupledGradient("dummy_variable"))
 {
 }
 
