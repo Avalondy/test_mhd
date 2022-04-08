@@ -13,6 +13,7 @@
   # []
   [B]
     family = LAGRANGE_VEC
+    # family = NEDELEC_ONE
     order = FIRST
   []
   [q_dummy]
@@ -27,7 +28,7 @@
   [B_magnetic_flow]
     type = ADMagneticFlow
     variable = B
-    velocity = '1 0 0'
+    velocity = '0 0 0'
   []
   [B_diffusion]
     type = ADCoefVectorDiffusion
@@ -49,21 +50,21 @@
 []
 
 [BCs]
-  active = 'left right dummy'
+  active = 'left dummy'
   [left]
     type = ADVectorFunctionDirichletBC
     variable = B
-    function_x = 1
-    function_y = 0.1
-    function_z = 0.1
+    function_x = 5
+    function_y = 0
+    function_z = 5
     boundary = left
   []
   [right]
     type = ADVectorFunctionDirichletBC
     variable = B
-    function_x = 1
-    function_y = -0.1
-    function_z = -0.1
+    function_x = 5
+    function_y = 0
+    function_z = -5
     boundary = right
   []
   [dummy]
@@ -77,7 +78,7 @@
 [ICs]
   [IC_B]
     type = VectorConstantIC
-    x_value = 1
+    x_value = 5
     y_value = 0
     z_value = 0
     variable = B
@@ -98,6 +99,9 @@
   dt = 1E-2
   petsc_options_iname = '-pc_type -pc_hypre_type'
   petsc_options_value = ' hypre boomeramg'
+
+  steady_state_detection = true
+  steady_state_tolerance = 1E-5
 []
 
 [Outputs]
