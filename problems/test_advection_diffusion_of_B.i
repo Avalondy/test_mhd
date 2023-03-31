@@ -21,20 +21,16 @@
 []
 
 [Kernels]
-  [B_time_derivative]
-    type = ADVectorTimeDerivative
-    variable = B
-  []
   [B_magnetic_flow]
     type = ADMagneticFlow
     variable = B
-    velocity = '0 0 0'
+    velocity = '1 0 0'
   []
   [B_diffusion]
     type = ADCoefVectorDiffusion
     variable = B
-    mu_0 = 1.0E-6
-    sigma = 1.0E6
+    mu_0 = 1.0
+    sigma = 1.0
   []
 
   [B_coupled_dummy]
@@ -47,25 +43,71 @@
     variable = q_dummy
     B_field = B
   []
+  [force]
+    type = VectorBodyForce
+    variable = B
+    function = force
+  []
+[]
+
+[Functions]
+  [force]
+    type = ParsedVectorFunction
+    expression_x = '2-2*x'
+    expression_y = '2'
+    expression_z = '2*z'
+  []
 []
 
 [BCs]
-  active = 'left dummy'
+  # active = 'left right'
   [left]
     type = ADVectorFunctionDirichletBC
     variable = B
-    function_x = 5
-    function_y = 0
-    function_z = 5
+    function_x = 'x*x'
+    function_y = 'y*y'
+    function_z = '-2*(x+y)*z'
     boundary = left
   []
   [right]
     type = ADVectorFunctionDirichletBC
     variable = B
-    function_x = 5
-    function_y = 0
-    function_z = -5
+    function_x = 'x*x'
+    function_y = 'y*y'
+    function_z = '-2*(x+y)*z'
     boundary = right
+  []
+  [front]
+    type = ADVectorFunctionDirichletBC
+    variable = B
+    function_x = 'x*x'
+    function_y = 'y*y'
+    function_z = '-2*(x+y)*z'
+    boundary = front
+  []
+  [back]
+    type = ADVectorFunctionDirichletBC
+    variable = B
+    function_x = 'x*x'
+    function_y = 'y*y'
+    function_z = '-2*(x+y)*z'
+    boundary = back
+  []
+  [top]
+    type = ADVectorFunctionDirichletBC
+    variable = B
+    function_x = 'x*x'
+    function_y = 'y*y'
+    function_z = '-2*(x+y)*z'
+    boundary = top
+  []
+  [bottom]
+    type = ADVectorFunctionDirichletBC
+    variable = B
+    function_x = 'x*x'
+    function_y = 'y*y'
+    function_z = '-2*(x+y)*z'
+    boundary = bottom
   []
   [dummy]
     type = ADDirichletBC
@@ -75,33 +117,16 @@
   []
 []
 
-[ICs]
-  [IC_B]
-    type = VectorConstantIC
-    x_value = 5
-    y_value = 0
-    z_value = 0
-    variable = B
-  []
-  # [IC_u]
-  #   type = VectorConstantIC
-  #   x_value = 1
-  #   y_value = 0
-  #   z_value = 0
-  #   variable = u
-  # []
-[]
-
 [Executioner]
-  type = Transient
+  type = Steady
   solve_type = NEWTON
-  num_steps = 100
-  dt = 1E-2
+  # num_steps = 100
+  # dt = 1E-2
   petsc_options_iname = '-pc_type -pc_hypre_type'
   petsc_options_value = ' hypre boomeramg'
 
-  steady_state_detection = true
-  steady_state_tolerance = 1E-5
+  # steady_state_detection = true
+  # steady_state_tolerance = 1E-5
 []
 
 [Outputs]
