@@ -23,5 +23,5 @@ ADMagneticFlow::ADMagneticFlow(const InputParameters & parameters)
 ADRealVectorValue
 ADMagneticFlow::precomputeQpResidual()
 {
-  return _u[_qp] * _grad_velocity[_qp].tr() - _grad_velocity[_qp].transpose() * _u[_qp] + _grad_u[_qp].transpose() * _velocity[_qp];
+  return _u[_qp] * _grad_velocity[_qp].tr() - _velocity[_qp] * _grad_u[_qp].tr() - _grad_velocity[_qp].transpose() * _u[_qp] + _grad_u[_qp].transpose() * _velocity[_qp];
 }

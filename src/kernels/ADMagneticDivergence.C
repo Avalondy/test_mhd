@@ -22,5 +22,5 @@ ADMagneticDivergence::ADMagneticDivergence(const InputParameters & parameters)
 ADReal
 ADMagneticDivergence::precomputeQpResidual()
 {
-  return _grad_B[_qp].tr();
+  return -_grad_B[_qp].tr();
 }

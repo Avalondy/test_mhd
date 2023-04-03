@@ -1,3 +1,5 @@
+# Example taken from section 5.1 in [Int. J. Numer. Meth. Fluids 29: 535 – 554 (1999)]
+
 [Mesh]
   type = GeneratedMesh
   dim = 3
@@ -7,20 +9,20 @@
 []
 
 [Variables]
-  # [u]
-  #   family = LAGRANGE_VEC
-  #   order = FIRST
-  # []
   [B]
+    order = FIRST
     family = LAGRANGE_VEC
     # family = NEDELEC_ONE
-    order = FIRST
   []
   # [q_dummy]
   # []
 []
 
 [Kernels]
+  # [B_time_derivative]
+  #   type = ADVectorTimeDerivative
+  #   variable = B
+  # []
   [B_magnetic_flow]
     type = ADMagneticFlow
     variable = B
@@ -29,53 +31,79 @@
   [B_diffusion]
     type = ADCoefVectorDiffusion
     variable = B
-    mu_0 = 1.0
-    sigma = 1.0
+    mu_0 = 1
+    sigma = 1
   []
-
   # [B_coupled_dummy]
   #   type = ADCoupledDummy
   #   variable = B
   #   dummy_variable = q_dummy
   # []
+  [B_body_force]
+    type = VectorBodyForce
+    variable = B
+    function = body_force
+  []
+
   # [Magnetic_divergence]
   #   type = ADMagneticDivergence
   #   variable = q_dummy
   #   B_field = B
   # []
-  [force]
-    type = VectorBodyForce
-    variable = B
-    function = force
-  []
+  # [Magnetic_divergence_PSPG]
+  #   type = ADMagneticDivergencePSPG
+  #   variable = q_dummy
+  #   mu_0 = 1
+  #   sigma = 1
+  # []
 []
 
 [Functions]
-  [force]
+  [body_force]
     type = ParsedVectorFunction
-    expression_x = '2-2*x'
-    expression_y = '2'
-    expression_z = '2*z'
+    value_x = '2-2*x'
+    value_y = '2'
+    value_z = '2*z'
+  []
+  [exact]
+    type = ParsedVectorFunction
+    value_x = 'x*x'
+    value_y = 'y*y'
+    value_z = '-2*(x+y)*z'
   []
 []
 
 [BCs]
-  # active = 'left right'
-  [BC_B]
+  [all]
     type = ADVectorFunctionDirichletBC
     variable = B
-    function_x = 'x*x'
-    function_y = 'y*y'
-    function_z = '-2*(x+y)*z'
+    function = exact
     boundary = 'bottom right left top front back'
   []
-  # [BC_dummy]
+  # [dummy]
   #   type = ADDirichletBC
   #   variable = q_dummy
   #   boundary = 'bottom right left top front back'
   #   value = 0
   # []
 []
+
+# [ICs]
+#   [IC_B]
+#     type = VectorConstantIC
+#     x_value = 5
+#     y_value = 0
+#     z_value = 0
+#     variable = B
+#   []
+#   # [IC_u]
+#   #   type = VectorConstantIC
+#   #   x_value = 1
+#   #   y_value = 0
+#   #   z_value = 0
+#   #   variable = u
+#   # []
+# []
 
 [Executioner]
   type = Steady
@@ -91,5 +119,5 @@
 
 [Outputs]
   exodus = true
-  execute_on = 'TIMESTEP_END'
+  # execute_on = 'TIMESTEP_END'
 []

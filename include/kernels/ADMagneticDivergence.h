@@ -13,7 +13,7 @@ public:
   ADMagneticDivergence(const InputParameters & parameters);
 
 protected:
-  virtual ADReal precomputeQpResidual() override;
+  ADReal precomputeQpResidual() override;
 
   const ADVectorVariableGradient & _grad_B;
 };
